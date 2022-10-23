@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-f)&=$6ly65ae+f+1(zbd*-k$%kykmiqiy1ph3rika_%=!mpq4x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'store'
 ]
+
+AUTH_USER_MODEL = 'store.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -99,6 +101,10 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+LOGIN_URL='/login'
+LOGIN_REDIRECT_URL='/'
 
 
 # Static files (CSS, JavaScript, Images)
