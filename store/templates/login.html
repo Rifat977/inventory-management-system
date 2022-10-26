@@ -38,29 +38,33 @@
             <div class="auth-box  border-top border-secondary">
                 <div id="loginform">
                     <div class="text-center pt-3 pb-3">
-                        <span class="db"><img src="{% static '/assets/images/logo.png' %}" alt="logo"
-              /></span>
+                        <!-- <span class="db"><img src="{% static '/assets/images/logo.png' %}" alt="logo"/></span> -->
+                        <h1 class="text-light">Login IMS</h1>
                     </div>
                     <!-- Form -->
-                    <form class="form-horizontal mt-3" id="loginform" action="index.html">
+                    <form method="POST" action="{% url 'store:login' %}" class="form-horizontal bg-dark mt-3" id="loginform" action="index.html">
+                        {% csrf_token %}
                         <div class="row pb-4">
                             <div class="col-12">
-                                <div class="input-group mb-3">
+                                <div class="input-group mb-4">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text bg-success text-white h-100" id="basic-addon1"><i class="mdi mdi-account fs-4"></i
+                                        <span class="input-group-text bg-primary text-white h-100" id="basic-addon1"><i class="mdi mdi-account fs-4"></i
                       ></span>
                                     </div>
-                                    <input type="text" class="form-control form-control-lg" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required="" />
+                                    <input type="text" name="username" class="form-control form-control-lg" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required="" />
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text bg-warning text-white h-100" id="basic-addon2"><i class="mdi mdi-lock fs-4"></i
                       ></span>
                                     </div>
-                                    <input type="text" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required="" />
+                                    <input type="password" name="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required="" />
                                 </div>
                             </div>
                         </div>
+                        {% for message in messages %}
+                        <p class="text-danger mt-2" id="messages">* {{message}}</p>
+                        {% endfor %}
                         <div class="row border-top border-secondary">
                             <div class="col-12">
                                 <div class="form-group">
@@ -77,45 +81,9 @@
                         </div>
                     </form>
                 </div>
-                <div id="recoverform">
-                    <div class="text-center">
-                        <span class="text-white">Enter your e-mail address below and we will send you
-                instructions how to recover a password.</span
-              >
             </div>
-            <div class="row mt-3">
-              <!-- Form -->
-              <form class="col-12" action="index.html">
-                <!-- email -->
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <span
-                      class="input-group-text bg-danger text-white h-100"
-                      id="basic-addon1"
-                      ><i class="mdi mdi-email fs-4"></i
-                    ></span>
-                    </div>
-                    <input type="text" class="form-control form-control-lg" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon1" />
-                </div>
-                <!-- pwd -->
-                <div class="row mt-3 pt-3 border-top border-secondary">
-                    <div class="col-12">
-                        <a class="btn btn-success text-white" href="#" id="to-login" name="action">Back To Login</a
-                    >
-                    <button
-                      class="btn btn-info float-end"
-                      type="button"
-                      name="action"
-                    >
-                      Recover
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
     </div>
     <!-- ============================================================== -->
     <!-- All Required js -->
@@ -127,18 +95,19 @@
     <!-- This page plugin js -->
     <!-- ============================================================== -->
     <script>
-      $(".preloader").fadeOut();
-      // ==============================================================
-      // Login and Recover Password
-      // ==============================================================
-      $("#to-recover").on("click", function () {
-        $("#loginform").slideUp();
-        $("#recoverform").fadeIn();
-      });
-      $("#to-login").click(function () {
-        $("#recoverform").hide();
-        $("#loginform").fadeIn();
-      });
+        $(".preloader").fadeOut();
+        // ==============================================================
+        // Login and Recover Password
+        // ==============================================================
+        $("#to-recover").on("click", function() {
+            $("#loginform").slideUp();
+            $("#recoverform").fadeIn();
+        });
+        $("#to-login").click(function() {
+            $("#recoverform").hide();
+            $("#loginform").fadeIn();
+        });
     </script>
-  </body>
+</body>
+
 </html>

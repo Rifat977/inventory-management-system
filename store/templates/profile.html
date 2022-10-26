@@ -1,0 +1,143 @@
+{% extends './asset/base.html' %} {% load static %} {% block breadcrumb %}
+<div class="page-breadcrumb">
+    <div class="row">
+        <div class="col-12 d-flex no-block align-items-center">
+            <h4 class="page-title">Profile</h4>
+            <div class="ms-auto text-end">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active"><a href="{% url 'store:profile' %}">Profile</a></li>
+                        <!-- <li class="breadcrumb-item active" aria-current="page"></li> -->
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock breadcrumb %} {% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <form class="form-horizontal" method="POST" action="{% url 'store:profile' %}">
+                    {%csrf_token%}
+                    <div class="card-body">
+                        <h4 class="card-title">Personal Info</h4>
+                        <div class="form-group row">
+                            <label for="fname" class="col-sm-3 text-end control-label col-form-label">Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="name" class="form-control" id="fname" value="{{user.name}}" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="email1" class="col-sm-3 text-end control-label col-form-label">phone</label
+                  >
+                  <div class="col-sm-9">
+                    <input
+                      type="text" name="phone"
+                      class="form-control"
+                      id="email1"
+                      value="{{user.phone}}"
+                    />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label
+                    for="cono1"
+                    class="col-sm-3 text-end control-label col-form-label"
+                    >Email</label
+                  >
+                  <div class="col-sm-9">
+                    <input
+                      type="text" name="email"
+                      class="form-control"
+                      id="cono1"
+                      value="{{user.email}}"
+                    />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label
+                    for="cono1"
+                    class="col-sm-3 text-end control-label col-form-label"
+                    >Adress</label
+                  >
+                  <div class="col-sm-9">
+                    <textarea class="form-control" name="address">{{user.address}}</textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="border-top">
+                <div class="card-body">
+                  <button type="submit" class="btn btn-primary">
+                    Update
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <form class="form-horizontal" method="POST" action="{% url 'store:change_password' %}">
+                    {%csrf_token%}
+                    <div class="card-body">
+                        <h4 class="card-title">Personal Info</h4>     
+                <div class="form-group row">
+                  <label
+                    for="cono1"
+                    class="col-sm-3 text-end control-label col-form-label"
+                    >Old Password</label
+                  >
+                  <div class="col-sm-6">
+                    <input
+                      type="password" name="old_password"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="form-group row">
+                    <label
+                      for="cono1"
+                      class="col-sm-3 text-end control-label col-form-label"
+                      >New Password</label
+                    >
+                    <div class="col-sm-6">
+                      <input
+                        type="password" name="new_password1"
+                        class="form-control"
+                        id="cono1"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label
+                      for="cono1"
+                      class="col-sm-3 text-end control-label col-form-label"
+                      >New Password (repat)</label
+                    >
+                    <div class="col-sm-6">
+                      <input
+                        type="password" name="new_password2"
+                        class="form-control"
+                        id="cono1"
+                      />
+                    </div>
+                  </div>
+              </div>
+              <div class="border-top">
+                <div class="card-body">
+                  <button type="submit" class="btn btn-primary">
+                    Change Password
+                  </button>
+                    {% for message in messages %}
+                    <p class="text-dark mt-2">{{message}}</p>
+                    {% endfor %}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+</div>
+{% endblock %}
