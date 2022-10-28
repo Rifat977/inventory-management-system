@@ -2,11 +2,11 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">Supplier</h4>
+            <h4 class="page-title">Buyer</h4>
             <div class="ms-auto text-end">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active"><a href="{% url 'store:supplier' %}">Supplier</a></li>
+                        <li class="breadcrumb-item active"><a href="{% url 'store:buyer' %}">Buyer</a></li>
                         <!-- <li class="breadcrumb-item active" aria-current="page"></li> -->
                     </ol>
                 </nav>
@@ -19,10 +19,10 @@
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <form class="form-horizontal" method="POST" action="{% url 'store:supplier' %}">
+                <form class="form-horizontal" method="POST" action="{% url 'store:buyer' %}">
                     {%csrf_token%}
                     <div class="card-body">
-                        <h4 class="card-title">Add Supplier</h4>
+                        <h4 class="card-title">Add Buyer</h4>
                         <div class="form-group row">
                             <label for="fname" class="col-sm-3 text-end control-label col-form-label">Name *</label>
                             <div class="col-sm-9">
