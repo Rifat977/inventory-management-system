@@ -1,0 +1,42 @@
+{% extends '../asset/base.html' %} {% load static %} {% block breadcrumb %}
+<div class="page-breadcrumb">
+    <div class="row">
+        <div class="col-12 d-flex no-block align-items-center">
+            <h4 class="page-title">Edit Category</h4>
+            <div class="ms-auto text-end">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active"><a href="{% url 'store:buyer' %}">Edit Category</a></li>
+                        <!-- <li class="breadcrumb-item active" aria-current="page"></li> -->
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock breadcrumb %} {% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <form class="form-horizontal" method="POST" action="{% url 'store:category-update' category.id %}">
+                    {%csrf_token%}
+                    <div class="card-body">
+                        <h4 class="card-title">Edit Category</h4>
+                        <div class="form-group row">
+                            <label for="fname" class="col-sm-3 text-end control-label col-form-label">Name</label>
+                            <div class="col-sm-9">
+                                <input type="text" name="name" class="form-control" id="fname" value="{{category.name}}" />
+                            </div>
+                        </div>
+                        <span class="text-danger">{% for message in messages %} {{message}} {% endfor %}</span>
+                    </div>
+                    <div class="card-body">
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,20 +1,35 @@
-import email
-from turtle import update
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user
 from django.contrib.auth import authenticate, logout, login, update_session_auth_hash
 from django.contrib import messages
-from .models import Cart, Supplier, Buyer, Admin, User, Product
+from .models import *
 from django.contrib.auth.forms import PasswordChangeForm
 from .forms import AddToCartForm, ProductForm
 import random
-from django.db.models import Sum
+from django.db.models import When, F, Q
+from django.db import IntegrityError
 
 # Create your views here.
 @login_required
 def Dashboard(request):
-    return render(request, 'dashboard.html')
+    total_product = Product.objects.all().count()
+    in_stock = Product.objects.filter(
+        Q(qty__gte=1)
+    ).count()
+    warning = Product.objects.filter(
+        Q(qty__lte=5) & Q(qty__gte=1)
+    ).count()
+    out_stock = Product.objects.filter(
+        Q(qty=0)
+    ).count()
+    context = {
+        'total_product' : total_product,
+        'in_stock' : in_stock,
+        'warning' : warning,
+        'out_stock' : out_stock
+    }
+    return render(request, 'dashboard.html', context)
 
 @unauthenticated_user
 def Login(request):
@@ -149,6 +164,48 @@ def BuyerView(request):
     return render(request, 'buyer.html', context)
 
 @login_required
+def CategoryView(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        slug = name.replace(" ", "-").lower()
+        try:
+            Category.objects.create(name=name, slug=slug)
+        except IntegrityError as e:
+            messages.error(request, "Category already exists")
+        return redirect('store:category')
+    category = Category.objects.all()
+    context = {
+        'category' : category
+    }
+    return render(request, "category.html", context)
+
+@login_required
+def CategoryDelete(request, pk):
+    category = Category.objects.get(id=pk)
+    category.delete()
+    return redirect('store:category')
+
+@login_required
+def CategoryEdit(request, pk):        
+    category = Category.objects.get(id=pk)
+    if request.method == 'POST': 
+        name = request.POST['name']
+        slug = name.replace(" ", "-").lower()
+        try:
+            cat = Category.objects.get(id=pk)
+            cat.name = name
+            cat.slug = slug
+            cat.save()
+        except IntegrityError as e:
+            messages.error(request, "Category already exists")
+        return redirect('store:category')
+    context = {
+        'category' : category
+    }
+    return render(request, './edit/category.html', context)
+
+
+@login_required
 def ProductView(request):
     if request.method=='POST':
         form = ProductForm(request.POST, request.FILES)
@@ -183,16 +240,50 @@ def AddSaleView(request):
 def AddToCart(request):
     if request.method=='POST':
         product_id = request.POST['product']
-        if not Cart.objects.filter(product=product_id).exists():
-            form = AddToCartForm(request.POST)
-            if form.is_valid:
-                form.save()
+        qty = request.POST['qty']
+        product = Product.objects.get(id=product_id)
+        if (int(product.qty)-int(qty)) < 0:
+            messages.info(request, "Not enough in stock")
         else:
-            messages.info(request, "Product already added")
+            if not Cart.objects.filter(product=product_id).exists():
+                form = AddToCartForm(request.POST)
+                if form.is_valid:
+                    form.save()
+                    product.qty = product.qty-int(qty)
+                    product.save()
+            else:
+                messages.info(request, "Product already added")
     return redirect('store:sale')
 
 @login_required
-def DeleteCartItem(request, pk):
+def DeleteCartItem(request, pk, qty, product_id):
+    product = Product.objects.get(id=product_id)
+    product.qty += qty
+    product.save()
     item = Cart.objects.get(id=pk)
     item.delete()
     return redirect('store:sale')
+
+@login_required
+def AddSale(request):
+    if request.method == 'POST':
+        payable = request.POST['payable']
+        paid = request.POST['paid']
+        customer_id = request.POST['customer']
+        date = request.POST['date']
+        seller = request.POST['seller_id']
+        invoice = str(random.randint(100000,999999))
+        if Cart.objects.all().exists():
+            Sale.objects.create(
+                payable=payable, paid=paid, customer_id=customer_id, date=date, invoice=invoice, seller_id=seller
+            )
+            Cart.objects.all().delete()
+    return redirect('store:sale')
+
+@login_required
+def SaleReportView(request):
+    sales = Sale.objects.all()
+    context = {
+        'sales':sales
+    }
+    return render(request, 'sale_report.html', context)

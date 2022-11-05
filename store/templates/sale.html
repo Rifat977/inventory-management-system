@@ -28,8 +28,7 @@
                                 <div class="form-group row">
                                     <label for="fname" class="col-sm-3 text-end control-label col-form-label">Product</label>
                                     <div class="col-sm-9">
-                                        <select class="select2 form-select shadow-none" name="product">
-                                        <option>Select Product</option>
+                                        <select required class="select2 form-select shadow-none" name="product">
                                         {% for item in products %}
                                         <option value="{{item.id}}">{{item.name}}</option>
                                         {% endfor %}
@@ -53,100 +52,8 @@
                         {% endfor %}
                         <input type="hidden" value="{{request.user.id}}" name="seller_id" />
                         <button type="submit" class="btn btn-primary">Add to cart</button>
-                        <!-- <div class="col-md-12">
-                        <div class="table-responsive mt-5" style="clear: both">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center">#</th>
-                                        <th>Description</th>
-                                        <th class="text-end">Quantity</th>
-                                        <th class="text-end">Unit Cost</th>
-                                        <th class="text-end">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>Milk Powder</td>
-                                        <td class="text-end">2</td>
-                                        <td class="text-end">$24</td>
-                                        <td class="text-end">$48</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">2</td>
-                                        <td>Air Conditioner</td>
-                                        <td class="text-end">3</td>
-                                        <td class="text-end">$500</td>
-                                        <td class="text-end">$1500</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">3</td>
-                                        <td>RC Cars</td>
-                                        <td class="text-end">20</td>
-                                        <td class="text-end">%600</td>
-                                        <td class="text-end">$12000</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">4</td>
-                                        <td>Down Coat</td>
-                                        <td class="text-end">60</td>
-                                        <td class="text-end">$5</td>
-                                        <td class="text-end">$300</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="pull-right mt-4 text-end">
-                            <p>Sub - Total amount: $13,848</p>
-                            <p>vat (10%) : $138</p>
-                            <hr />
-                            <h3><b>Total :</b> $13,986</h3>
-                        </div>
-                        <div class="clearfix"></div>
-                        <hr />
-                        <div class="text-end">
-                            <button class="btn btn-danger text-white" type="submit">
-                Proceed to payment
-              </button>
-                        </div>
-                    </div> -->
                     </div>
                 </form>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card card-body printableArea">
-                <h4 class="card-title">Sale Info</h4>
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <div class="form-group row">
-                                <label for="fname" class="col-sm-3 text-end control-label col-form-label">Customer</label>
-                                <div class="col-sm-9">
-                                    <select required class="select2 form-select shadow-none" name="product">
-                                        <option>Select customer</option>
-                                        {% for item in customers %}
-                                        <option value="{{item.id}}">{{item.name}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <div class="form-group row">
-                                <label for="fname" class="col-sm-3 text-end control-label col-form-label">Date</label>
-                                <div class="col-sm-9">
-                                    <input required type="date" class="form-control" name="date" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
         <div class="col-md-12">
@@ -174,7 +81,7 @@
                                         <td class="text-end">{{cart.qty}}</td>
                                         <td class="text-end">${{cart.product.price}}</td>
                                         <td class="text-end">${{ cart.sub_total }}</td>
-                                        <td class="text-end"><a href="{% url 'store:delete-cart-item' cart.id %}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></a></td>
+                                        <td class="text-end"><a href="{% url 'store:delete-cart-item' cart.id cart.qty cart.product.id %}" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></a></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -208,57 +115,62 @@
             <span aria-hidden="true">&times;</span>
           </button>
             </div>
-            <div class="modal-body">
-                <div class="col-md-12">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label for="fname" class="col-sm-4 text-end control-label col-form-label">Total Payable</label>
-                            <div class="col-sm-8">
-                                <input type="number" disabled value="{{total_price}}" class="form-control" />
+            <form method="POST" action="{% url 'store:add-sale' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="fname" class="col-sm-4 text-end control-label col-form-label">Total Payable</label>
+                                <div class="col-sm-8">
+                                    <input type="number" disabled value="{{total_price}}" class="form-control" />
+                                    <input type="hidden" value="{{total_price}}" name="payable" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label for="fname" class="col-sm-4 text-end control-label col-form-label">Cash</label>
-                            <div class="col-sm-8">
-                                <input type="number" placeholder="Cash paid" class="form-control" />
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="fname" class="col-sm-4 text-end control-label col-form-label">Cash</label>
+                                <div class="col-sm-8">
+                                    <input type="number" placeholder="Cash paid" name="paid" class="form-control" />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label for="fname" class="col-sm-4 text-end control-label col-form-label">Customer</label>
-                            <div class="col-sm-8">
-                                <select required class="select2 form-select shadow-none" name="product">
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="fname" class="col-sm-4 text-end control-label col-form-label">Customer</label>
+                                <div class="col-sm-8">
+                                    <select required class="select2 form-select shadow-none" name="customer">
                                     <option>Select customer</option>
                                     {% for item in customers %}
                                     <option value="{{item.id}}">{{item.name}}</option>
                                     {% endfor %}
                                 </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <label for="fname" class="col-sm-4 text-end control-label col-form-label">Date</label>
-                            <div class="col-sm-8">
-                                <input required type="date" class="form-control" name="date" />
+                    <div class="col-md-12">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="fname" class="col-sm-4 text-end control-label col-form-label">Date</label>
+                                <div class="col-sm-8">
+                                    <input required type="date" class="form-control" name="date" />
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" value="{{request.user.admin.id}}" name="seller_id" />
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Sale</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

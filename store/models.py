@@ -1,6 +1,7 @@
 from email.policy import default
 from pyexpat import model
 from secrets import choice
+from tokenize import blank_re
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -60,6 +61,13 @@ class Admin(models.Model):
     def __str__(self):
         return self.name
 
+class Category(models.Model):
+    name = models.CharField(max_length=55, blank=False, null=False)
+    slug = models.CharField(max_length=60, blank=False, null=False, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class Product(models.Model):
     name = models.CharField(max_length=55, blank=False, null=False)
     price = models.FloatField(blank=False, null=False)
@@ -78,3 +86,14 @@ class Cart(models.Model):
     @property
     def sub_total(self):
         return self.product.price * self.qty
+
+class Sale(models.Model):
+    seller_id = models.IntegerField(blank=False, null=False)
+    customer = models.ForeignKey(Buyer, related_name='customer' ,on_delete=models.CASCADE)
+    invoice = models.CharField(max_length=100, blank=False, null=True)
+    payable = models.FloatField(blank=False, null=False)  
+    paid = models.FloatField(blank=False, null=False)
+    date = models.DateField()
+
+    def __str__(self):
+        return self.invoice

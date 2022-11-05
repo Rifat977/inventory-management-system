@@ -10,20 +10,36 @@
                         Dashboard</span></a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:supplier' %}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-cart"></i><span class="hide-menu">Product </span></a>
+                    <ul aria-expanded="false" class="collapse first-level">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:category' %}" aria-expanded="false"><i class="mdi mdi-application"></i><span class="hide-menu">
+                                Category</span></a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:product' %}" aria-expanded="false"><i class="mdi mdi-cart"></i><span class="hide-menu">
+                                Product</span></a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:supplier' %}" aria-expanded="false"><i class="mdi mdi-account-multiple-minus"></i><span class="hide-menu">
                         Supplier</span></a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:buyer' %}" aria-expanded="false"><i class="mdi mdi-account-multiple-plus"></i><span class="hide-menu">Customer</span></a>
+                        </li>
+
+                    </ul>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:buyer' %}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">
-                        Buyer</span></a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:product' %}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">
-                        Product</span></a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:sale' %}" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">
-                        Add Sale</span></a>
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Sales </span></a>
+                    <ul aria-expanded="false" class="collapse first-level">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:sale' %}" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">Add Sale</span></a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{% url 'store:sale-report' %}" aria-expanded="false"><i class="mdi mdi-chart-line"></i><span class="hide-menu">Report</span></a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>
